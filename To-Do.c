@@ -10,20 +10,35 @@ int Duracion; // entre 10 – 100
 
 typedef struct Nodo{
 Tarea T;
-Nodo *Siguiente;
+struct Nodo *Siguiente;
 } Nodo;
 
 Nodo * CrearListaVacia();
+Nodo *CrearNodo(Nodo* TareasPendientes,int cont);
+void insertarAlInicio(Nodo **Start,Nodo *NNodo);
 
 int main() 
 {
-    Nodo *TareasPendientes, *TareasRealizadas;
+    int num,cont=0;
+    Nodo *TareasPendientes, *TareasRealizadas,*NNodo;
 
 
     TareasPendientes = CrearListaVacia();
     TareasRealizadas = CrearListaVacia();
 
+    printf("Desea ingresar una tarea?\n1.Si\n2.No\n");
+    scanf("%d",&num);
 
+    while (num != 2)
+    {
+    cont++;
+      NNodo = CrearNodo(TareasPendientes,cont);
+      insertarAlInicio(&TareasPendientes,NNodo);
+      
+      printf("Desea ingresar otra tarea?\n1.Si\n2.No\n");
+        scanf("%d",&num);  
+    }
+    
 
     return 0;
 }
@@ -36,20 +51,42 @@ Nodo * CrearListaVacia()
 
 }
 
-Nodo *CrearNodo()
+Nodo *CrearNodo(Nodo* TareasPendientes, int cont)
 {
-   
    Nodo *NNodo = (Nodo*)malloc(sizeof(Nodo));
-   NNodo->T.TareaID += 1;
+
+  if (TareasPendientes)
+  {
+   NNodo->T.TareaID = cont + 1000;
+   printf("Ingrese duracion de la tarea: \n");
+   scanf("%d",&NNodo->T.Duracion);
+   printf("Ingrese descripcion de la tarea: \n");
+   fflush(stdin);
+   NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
+   gets(NNodo->T.Descripcion);
+   NNodo->Siguiente = NULL;
+
+   
+  }
+  else{
+   NNodo->T.TareaID = 1000;
    printf("Ingrese duracion de la tarea: \n");
    scanf("%d",&NNodo->T.Duracion);
    printf("Ingrese descripcion de la tarea: \n");
    NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
    gets(NNodo->T.Descripcion);
    NNodo->Siguiente = NULL;
-
-   return NNodo;
+        
+  }
     
+     return NNodo; 
     
 
+}
+
+void insertarAlInicio(Nodo **Start,Nodo *NNodo) 
+{
+   NNodo->Siguiente = *Start;
+   *Start = NNodo;
+    
 }
