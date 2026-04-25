@@ -16,6 +16,7 @@ struct Nodo *Siguiente;
 Nodo * CrearListaVacia();
 Nodo *CrearNodo(Nodo* TareasPendientes,int cont);
 void insertarAlInicio(Nodo **Start,Nodo *NNodo);
+void mostrarTareas(Nodo *Start);
 
 int main() 
 {
@@ -39,6 +40,7 @@ int main()
         scanf("%d",&num);  
     }
     
+    mostrarTareas(TareasPendientes);
 
     return 0;
 }
@@ -88,5 +90,18 @@ void insertarAlInicio(Nodo **Start,Nodo *NNodo)
 {
    NNodo->Siguiente = *Start;
    *Start = NNodo;
+    
+}
+
+void mostrarTareas(Nodo *Start)
+{
+    Nodo *aux = Start;
+    while (aux)
+    {
+       printf("%d", aux->T.TareaID); 
+        aux = aux->Siguiente;    
+    }
+    
+   
     
 }
