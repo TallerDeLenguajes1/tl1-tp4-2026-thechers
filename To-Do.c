@@ -16,12 +16,15 @@ struct Nodo *Siguiente;
 Nodo * CrearListaVacia();
 Nodo *CrearNodo(Nodo* TareasPendientes,int cont);
 void insertarAlInicio(Nodo **Start,Nodo *NNodo);
+void insertarAlFinal(Nodo *Start,Nodo *NNodo);
 void mostrarTareas(Nodo *Start);
+Nodo* eliminarTareas (Nodo **Start, int id);
+
 
 int main() 
 {
-    int num,cont=0;
-    Nodo *TareasPendientes, *TareasRealizadas,*NNodo;
+    int num,cont=0,id,num1;
+    Nodo *TareasPendientes, *TareasRealizadas,*NNodo,*TareaExtraida;
 
 
     TareasPendientes = CrearListaVacia();
@@ -32,14 +35,75 @@ int main()
 
     while (num != 2)
     {
-    cont++;
+    
       NNodo = CrearNodo(TareasPendientes,cont);
-      insertarAlInicio(&TareasPendientes,NNodo);
+      
+      if (TareasPendientes){
+         insertarAlFinal(TareasPendientes,NNodo);
+      }
+       else{
+        insertarAlInicio(&TareasPendientes,NNodo);
+       }
+        
+    
       
       printf("Desea ingresar otra tarea?\n1.Si\n2.No\n");
-        scanf("%d",&num);  
+      scanf("%d",&num);
+        
+        cont++;
     }
     
+    mostrarTareas(TareasPendientes);
+
+    printf("Ingrese el ID de la tarea a ser movida: ");
+    scanf("%d", &id);
+
+    TareaExtraida = eliminarTareas(&TareasPendientes,id);
+
+    if (TareaExtraida)
+    {
+       if (TareasRealizadas)
+       {
+         insertarAlFinal(TareasRealizadas,TareaExtraida);
+       }
+       else
+       {
+        insertarAlInicio(&TareasRealizadas,TareaExtraida);
+       }
+        
+    }
+
+    mostrarTareas(TareasRealizadas);
+
+    printf("Desea mover otra tarea?: \n1.Si\n2.No");
+    scanf("%d", &num1);
+    while (num1 != 2)
+    {
+       printf("Ingrese el ID de la tarea a ser movida: ");
+        scanf("%d", &id);
+        
+        TareaExtraida = eliminarTareas(&TareasPendientes,id);
+
+    if (TareaExtraida)
+    {
+       if (TareasRealizadas)
+       {
+         insertarAlFinal(TareasRealizadas,TareaExtraida);
+       }
+       else
+       {
+        insertarAlInicio(&TareasRealizadas,TareaExtraida);
+       }
+        
+    }
+
+     printf("Desea mover otra tarea?: \n1.Si\n2.No");
+        scanf("%d", &num1);
+
+    }
+    
+    mostrarTareas(TareasRealizadas);
+
     mostrarTareas(TareasPendientes);
 
     return 0;
@@ -63,8 +127,8 @@ Nodo *CrearNodo(Nodo* TareasPendientes, int cont)
    printf("Ingrese duracion de la tarea: \n");
    scanf("%d",&NNodo->T.Duracion);
    printf("Ingrese descripcion de la tarea: \n");
-   fflush(stdin);
    NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
+   fflush(stdin);
    gets(NNodo->T.Descripcion);
    NNodo->Siguiente = NULL;
 
@@ -76,6 +140,7 @@ Nodo *CrearNodo(Nodo* TareasPendientes, int cont)
    scanf("%d",&NNodo->T.Duracion);
    printf("Ingrese descripcion de la tarea: \n");
    NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
+   fflush(stdin);
    gets(NNodo->T.Descripcion);
    NNodo->Siguiente = NULL;
         
@@ -93,15 +158,57 @@ void insertarAlInicio(Nodo **Start,Nodo *NNodo)
     
 }
 
+void insertarAlFinal(Nodo *Start,Nodo *NNodo)
+{
+    Nodo *aux = Start;
+
+    while (aux->Siguiente)
+    {
+        aux = aux->Siguiente;
+    }
+
+    aux->Siguiente = NNodo;
+    
+}
+
 void mostrarTareas(Nodo *Start)
 {
     Nodo *aux = Start;
     while (aux)
     {
-       printf("%d", aux->T.TareaID); 
+       printf("Tarea Nro. %d\n", aux->T.TareaID); 
+       printf("Duracion de la tarea: %d\n", aux->T.Duracion);
+       printf("Descripcion de la tarea: %s\n", aux->T.Descripcion);
         aux = aux->Siguiente;    
     }
     
-   
-    
 }
+
+Nodo* eliminarTareas (Nodo **Start, int id) 
+{
+    Nodo *aux = *Start;
+    Nodo *auxAnt = NULL;
+
+    while (aux && aux->T.TareaID != id)
+    {
+        auxAnt = aux;
+        aux = aux->Siguiente;
+    }
+
+    if (aux)
+    {
+        if (aux == *Start)
+        {
+            *Start = aux->Siguiente;
+        }
+        else
+        {
+            auxAnt->Siguiente = aux->Siguiente;
+        }
+        aux->Siguiente = NULL;   
+    }
+
+    return aux;
+
+}
+
