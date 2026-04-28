@@ -23,6 +23,7 @@ Nodo* eliminarTareas (Nodo **Start, int id);
 
 int main() 
 {
+    srand(time(NULL));
     int num,cont=0,id,num1;
     Nodo *TareasPendientes, *TareasRealizadas,*NNodo,*TareaExtraida;
 
@@ -124,8 +125,7 @@ Nodo *CrearNodo(Nodo* TareasPendientes, int cont)
   if (TareasPendientes)
   {
    NNodo->T.TareaID = cont + 1000;
-   printf("Ingrese duracion de la tarea: \n");
-   scanf("%d",&NNodo->T.Duracion);
+   NNodo->T.Duracion = 10 + rand() % 91;
    printf("Ingrese descripcion de la tarea: \n");
    NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
    fflush(stdin);
@@ -136,8 +136,7 @@ Nodo *CrearNodo(Nodo* TareasPendientes, int cont)
   }
   else{
    NNodo->T.TareaID = 1000;
-   printf("Ingrese duracion de la tarea: \n");
-   scanf("%d",&NNodo->T.Duracion);
+   NNodo->T.Duracion = 10 + rand() % 91;
    printf("Ingrese descripcion de la tarea: \n");
    NNodo->T.Descripcion = (char*)malloc(50*sizeof(char));
    fflush(stdin);
@@ -209,6 +208,64 @@ Nodo* eliminarTareas (Nodo **Start, int id)
     }
 
     return aux;
+
+}
+
+void mostrarNodo(Nodo *start)
+{
+    int id,num;
+    char *palClave,*control;
+    Nodo *aux = start;
+
+    
+
+    
+
+    printf("Ingrese el metodo de busca: \n1.ID\n2.Palabra Clave");
+    scanf("%d", &num);
+
+    switch (num)
+    {
+    case 1:
+        printf("Ingrese un ID para buscar: \n");
+        scanf("%d", &id);
+
+        while (aux && aux->T.TareaID != id)
+        {
+            aux = aux->Siguiente;
+        }
+
+        if (aux) {
+            printf("Tarea Nro. %d\n", aux->T.TareaID); 
+            printf("Duracion de la tarea: %d\n", aux->T.Duracion);
+            printf("Descripcion de la tarea: %s\n", aux->T.Descripcion);
+        }
+        else{
+            printf("No se encontro el ID indicado");
+        }
+    
+        break;
+    
+    case 2:
+        palClave = (char*)malloc(50 * sizeof(char));
+        printf("Ingrese una palabra: \n");
+        fflush(stdin);
+        gets(palClave);
+
+        while(aux){
+
+            control = strstr(aux->T.Descripcion,palClave);
+
+            if (control){
+                
+
+        }
+        break;
+    }
+
+
+
+
 
 }
 
